@@ -1,0 +1,113 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Wild Animals{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6">
+
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-green-700">Wild Animals</h2>
+        <a href="{% url 'add_animal' %}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow">
+            + Add Animal
+        </a>
+    </div>
+
+    <!-- 🔍 Search & Filter -->
+    <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+
+        <input type="text" name="q" placeholder="Search by animal name..." value="{{ query|default:'' }}"
+            class="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">
+
+        <select name="category" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">
+            <option value="all">All Categories</option>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if cat.id|stringformat:"s" == selected_category %}selected{% endif %}>
+                {{ cat.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <button class="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-md">
+            Filter
+        </button>
+
+    </form>
+
+    {% if animals %}
+    <!-- 🟢 Table -->
+    <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+
+        <table class="w-full border-collapse">
+            <thead>
+                <tr class="bg-green-700 text-white text-left">
+                    <th class="py-3 px-4">#</th>
+                    <th class="py-3 px-4">Image</th>
+                    <th class="py-3 px-4">Name</th>
+                    <th class="py-3 px-4">Category</th>
+                    <th class="py-3 px-4">About</th>
+                    <th class="py-3 px-4 text-center">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for animal in animals %}
+                <tr class="border-b hover:bg-gray-100">
+
+                    <td class="py-3 px-4">{{ forloop.counter }}</td>
+
+                    <td class="py-3 px-4">
+                        {% if animal.image %}
+                        <img src="{{ animal.image.url }}" class="h-16 w-20 object-cover rounded border" />
+                        {% else %}
+                        <img src="{% static 'images/no_image.jpg' %}" class="h-16 w-20 object-cover rounded border" />
+                        {% endif %}
+                    </td>
+
+                    <td class="py-3 px-4 font-semibold">{{ animal.name }}</td>
+
+                    <td class="py-3 px-4">{{ animal.category.name }}</td>
+
+                    <td class="py-3 px-4 max-w-xs">
+                        {{ animal.about|truncatewords:12|default:"No details available." }}
+                    </td>
+
+                    <td class="py-3 px-4 text-center">
+                        <div class="flex justify-center gap-3">
+
+                            <!-- View Button (Green) -->
+                            <a href="{% url 'view_animal_details' animal.id %}"
+                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md text-sm transition">
+                                View
+                            </a>
+
+                            <!-- Edit Button (Blue) -->
+                            <a href="{% url 'edit_animal' animal.id %}"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-md text-sm transition">
+                                Edit
+                            </a>
+
+                            <!-- Delete Button (Red) -->
+                            <a href="{% url 'delete_animal' animal.id %}"
+                                onclick="return confirm('Are you sure you want to delete this animal?');"
+                                class="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-md text-sm transition">
+                                Delete
+                            </a>
+
+                        </div>
+                    </td>
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <div class="bg-yellow-100 text-yellow-800 p-4 text-center rounded-lg mt-6">
+        No animals found matching your search.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

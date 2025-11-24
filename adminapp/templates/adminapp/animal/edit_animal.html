@@ -1,0 +1,53 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Edit {{ animal.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto p-6">
+
+    <h2 class="text-3xl font-bold text-green-700 text-center mb-6">
+        Edit {{ animal.name }}
+    </h2>
+
+    {% include 'includes/_messages.html' %}
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <form method="POST" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+
+            <!-- Loop through form fields -->
+            {% for field in form %}
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">{{ field.label }}</label>
+
+                    {{ field }}
+
+                    {% if field.errors %}
+                        <p class="text-red-600 text-sm mt-1">{{ field.errors|striptags }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <!-- Buttons -->
+            <div class="flex justify-between pt-4">
+
+                <!-- Cancel Button -->
+                <a href="{% url 'view_animals' %}"
+                   class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-md">
+                    Cancel
+                </a>
+
+                <!-- Save Button -->
+                <button type="submit"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+    </div>
+
+</div>
+{% endblock %}

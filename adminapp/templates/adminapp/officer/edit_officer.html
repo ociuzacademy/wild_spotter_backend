@@ -1,0 +1,87 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10 bg-white shadow-lg rounded-lg p-8">
+
+    <h2 class="text-3xl font-bold text-blue-700 text-center mb-6">
+        Edit Forest Officer
+    </h2>
+
+    {% include 'includes/_messages.html' %}
+
+    <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 gap-6">
+        {% csrf_token %}
+        <div>
+            <label class="font-semibold">Assign Sanctuary</label>
+            <select name="sanctuary" class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-blue-600">
+                {% for s in sanctuaries %}
+                <option value="{{ s.id }}" {% if s.id == officer.sanctuary.id %}selected{% endif %}>
+                    {{ s.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label class="font-semibold">Officer ID</label>
+            <input type="text" name="officer_id" value="{{ officer.officer_id }}" required
+                class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-blue-600">
+        </div>
+
+        <div>
+            <label class="font-semibold">Name</label>
+            <input type="text" name="name" value="{{ officer.name }}" required
+                class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-blue-600">
+        </div>
+
+        <div>
+            <label class="font-semibold">Email</label>
+            <input type="email" name="email" value="{{ officer.email }}" required
+                class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-blue-600">
+        </div>
+
+        <div>
+            <label class="font-semibold">Phone</label>
+            <input type="text" name="phone" value="{{ officer.phone }}" required
+                class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-blue-600">
+        </div>
+
+        <div>
+            <label class="font-semibold">Password (Leave blank to keep old)</label>
+            <input type="password" name="password"
+                class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-blue-600">
+        </div>
+
+        <div>
+            <label class="font-semibold">Profile Image</label>
+            {% if officer.profile_image %}
+            <img src="{{ officer.profile_image.url }}" class="h-20 w-20 rounded-full border mb-2">
+            {% endif %}
+            <input type="file" name="profile_image" class="w-full border rounded-md px-4 py-2">
+        </div>
+
+        <div>
+            <label class="font-semibold">ID Card Image</label>
+            {% if officer.id_card_image %}
+            <img src="{{ officer.id_card_image.url }}" class="h-20 w-20 border rounded mb-2">
+            {% endif %}
+            <input type="file" name="id_card_image" class="w-full border rounded-md px-4 py-2">
+        </div>
+
+        <div class="flex justify-between mt-6">
+
+            <a href="{% url 'list_forest_officers' %}"
+                class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-md">
+                Cancel
+            </a>
+
+            <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-2 rounded-md font-bold">
+                Update Officer
+            </button>
+
+        </div>
+
+    </form>
+</div>
+{% endblock %}

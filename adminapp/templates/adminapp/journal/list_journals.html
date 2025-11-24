@@ -1,0 +1,86 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Manage Journals{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6">
+
+    {% include 'includes/_messages.html' %}
+    <h1 class="text-center font-bold text-2xl">Journals</h1>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+
+        <!-- TABS -->
+        <div class="border-b border-gray-300 mb-6">
+            <nav class="flex space-x-6">
+
+                <button 
+                    onclick="openTab('pending')"
+                    id="pending-btn"
+                    class="py-2 px-4 text-green-700 font-semibold border-b-4 border-green-700">
+                    Pending
+                </button>
+
+                <button 
+                    onclick="openTab('approved')"
+                    id="approved-btn"
+                    class="py-2 px-4 text-gray-600 hover:text-green-700">
+                    Approved
+                </button>
+
+                <button 
+                    onclick="openTab('rejected')"
+                    id="rejected-btn"
+                    class="py-2 px-4 text-gray-600 hover:text-green-700">
+                    Rejected
+                </button>
+
+            </nav>
+        </div>
+
+        <!-- TAB CONTENT -->
+        <div>
+
+            <!-- Pending Tab -->
+            <div id="pending" class="tab-content">
+                {% include 'adminapp/journal/table.html' with journals=pending_journals show_actions=True %}
+            </div>
+
+            <!-- Approved Tab -->
+            <div id="approved" class="tab-content hidden">
+                {% include 'adminapp/journal/table.html' with journals=approved_journals show_actions=True %}
+            </div>
+
+            <!-- Rejected Tab -->
+            <div id="rejected" class="tab-content hidden">
+                {% include 'adminapp/journal/table.html' with journals=rejected_journals show_actions=True %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Tailwind Tab Switcher -->
+<script>
+function openTab(tab) {
+    const tabs = ["pending", "approved", "rejected"];
+
+    tabs.forEach(t => {
+        document.getElementById(t).classList.add("hidden");
+        document.getElementById(t + "-btn").classList.remove("border-green-700", "text-green-700", "font-semibold");
+        document.getElementById(t + "-btn").classList.add("text-gray-600");
+    });
+
+    document.getElementById(tab).classList.remove("hidden");
+    document.getElementById(tab + "-btn").classList.add("border-b-4", "border-green-700", "text-green-700", "font-semibold");
+    document.getElementById(tab + "-btn").classList.remove("text-gray-600");
+}
+
+// Show default tab on page load
+document.addEventListener("DOMContentLoaded", function () {
+    openTab('pending');
+});
+</script>
+
+{% endblock %}

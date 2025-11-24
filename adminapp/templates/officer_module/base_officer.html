@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Forest Officer | WildSpotter{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-white text-gray-800">
+
+<!-- NAVBAR -->
+<nav class="bg-green-700 text-white shadow-md">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-center h-16">
+      
+      <!-- LEFT: Logo -->
+      <div class="flex items-center space-x-6">
+        <h1 class="text-2xl font-bold">🌿 WildSpotter</h1>
+        <span class="text-green-200 font-medium">Forest Officer Portal</span>
+      </div>
+
+      <!-- RIGHT: Menu -->
+      <div class="flex items-center space-x-6">
+
+        <a href="{% url 'forest_dashboard' %}" class="hover:text-green-200">Home</a>
+
+        <a href="{% url 'forest_officer_profile' %}" class="hover:text-green-200">Profile</a>
+
+        <a href="{% url 'officer_recent_sightings' %}" class="hover:text-green-200">
+          Recent Sightings
+        </a>
+
+        <div class="relative">
+            <button
+              class="hover:text-green-200 focus:outline-none flex items-center gap-1"
+              onclick="toggleDropdown('posterDropdown')"
+            >
+              Awareness Poster  ▾
+            </button>
+            <div
+              id="posterDropdown"
+              class="hidden absolute left-0 mt-2 flex-col bg-white text-green-700 rounded-md shadow-lg z-10 min-w-[180px]">
+              <a href="{% url 'add_awareness_poster' %}" class="px-4 py-2 hover:bg-green-100">Add Poster</a><br>
+              <br>
+              <a href="{% url 'list_awareness_posters' %}" class="px-4 py-2 hover:bg-green-100">List Poster</a>
+            </div>
+          </div>
+
+        <div class="relative">
+            <button
+              class="hover:text-green-200 focus:outline-none flex items-center gap-1"
+              onclick="toggleDropdown('proDropdown')"
+            >
+              Protection Images▾
+            </button>
+            <div
+              id="proDropdown"
+              class="hidden absolute left-0 mt-2 flex-col bg-white text-green-700 rounded-md shadow-lg z-10 min-w-[180px]">
+              <a href="{% url 'add_protection_image' %}" class="px-4 py-2 hover:bg-green-100">Add Images</a><br>
+              <br>
+              <a href="{% url 'list_protection_images' %}" class="px-4 py-2 hover:bg-green-100">List Images</a>
+            </div>
+          </div>
+
+        <div class="relative">
+            <button
+              class="hover:text-green-200 focus:outline-none flex items-center gap-1"
+              onclick="toggleDropdown('videoDropdown')"
+            >
+              Educational Videos ▾
+            </button>
+            <div
+              id="videoDropdown"
+              class="hidden absolute left-0 mt-2 flex-col bg-white text-green-700 rounded-md shadow-lg z-10 min-w-[180px]">
+              <a href="{% url 'add_educational_video' %}" class="px-4 py-2 hover:bg-green-100">Add Video</a><br>
+              <br>
+              <a href="{% url 'list_educational_videos' %}" class="px-4 py-2 hover:bg-green-100">List Videos</a>
+            </div>
+          </div>
+
+        <a href="{% url 'admin_logout' %}" 
+           class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg font-semibold">
+          Logout
+        </a>
+
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<main class="max-w-7xl mx-auto py-10 px-4">
+  {% block content %}{% endblock %}
+
+</main>
+
+<!-- FOOTER -->
+<footer class="bg-green-700 text-white py-4 text-center mt-10">
+  <p class="text-sm">© {{ now|date:"Y" }} WildSpotter Forest Officer Portal. All rights reserved.</p>
+</footer>
+<!-- JavaScript for Dropdowns -->
+  <script>
+    function toggleDropdown(id) {
+      const dropdown = document.getElementById(id);
+      const allDropdowns = document.querySelectorAll('[id$="Dropdown"]');
+      allDropdowns.forEach(el => {
+        if (el !== dropdown) el.classList.add('hidden'); // Close others
+      });
+      dropdown.classList.toggle('hidden');
+    }
+
+    // Close dropdowns when clicking outside
+    window.addEventListener('click', function (e) {
+      const buttons = document.querySelectorAll('button[onclick^="toggleDropdown"]');
+      if (![...buttons].some(btn => btn.contains(e.target))) {
+        document.querySelectorAll('[id$="Dropdown"]').forEach(d => d.classList.add('hidden'));
+      }
+    });
+  </script>
+</body>
+</html>

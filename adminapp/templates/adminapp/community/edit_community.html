@@ -1,0 +1,87 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Edit Community{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto p-6">
+
+    <h2 class="text-3xl font-bold text-green-700 text-center mb-6">
+        Edit Community
+    </h2>
+
+    {% include 'includes/_messages.html' %}
+
+    <form method="POST" enctype="multipart/form-data"
+          class="bg-white shadow-md rounded-lg p-6 space-y-4">
+        {% csrf_token %}
+
+        <!-- Community Name -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Community Name</label>
+            <input type="text"
+                   name="name"
+                   value="{{ community.name }}"
+                   required
+                   class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">
+        </div>
+
+        <!-- Sanctuary Select -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Select Sanctuary</label>
+            <select name="sanctuary"
+                    required
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">
+                {% for s in sanctuaries %}
+                    <option value="{{ s.id }}" {% if s.id == community.sanctuary.id %}selected{% endif %}>
+                        {{ s.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Members -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Members</label>
+            <input type="number"
+                   name="members"
+                   value="{{ community.members }}"
+                   class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">
+        </div>
+
+        <!-- Community Picture -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Community Picture</label>
+
+            {% if community.picture %}
+            <div class="mb-3">
+                <img src="{{ community.picture.url }}"
+                     alt="Current Picture"
+                     class="h-24 w-24 object-cover rounded-md shadow border">
+            </div>
+            {% endif %}
+
+            <input type="file"
+                   name="picture"
+                   class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-between pt-4">
+
+            <!-- Cancel Button -->
+            <a href="{% url 'list_community' %}"
+               class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                Cancel
+            </a>
+
+            <!-- Update Button -->
+            <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md">
+                Update Community
+            </button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

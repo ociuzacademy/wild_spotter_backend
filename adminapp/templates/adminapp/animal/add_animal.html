@@ -1,0 +1,46 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Add Wild Animal{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto">
+
+  <h2 class="text-2xl font-semibold text-green-700 mb-6 text-center">
+    Add New Wild Animal
+  </h2>
+
+  {% include 'includes/_messages.html' %}
+
+  <form method="POST" enctype="multipart/form-data" class="space-y-4">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">
+          {{ field.label }}
+        </label>
+
+        {{ field }}
+
+        {% if field.errors %}
+          <p class="text-red-600 text-sm mt-1">
+            {{ field.errors.0 }}
+          </p>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <div class="flex justify-end pt-4 space-x-3">
+      
+
+      <button type="submit" 
+              class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md">
+        Add Animal
+      </button>
+    </div>
+
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}View Users{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6">
+
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-green-700">Registered Users</h2>
+    </div>
+
+    {% if users %}
+    <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+
+        <table class="w-full border-collapse">
+            <thead>
+                <tr class="bg-green-700 text-white">
+                    <th class="py-3 px-4">#</th>
+                    <th class="py-3 px-4">Name</th>
+                    <th class="py-3 px-4">Username</th>
+                    <th class="py-3 px-4">Email</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for u in users %}
+                <tr class="border-b hover:bg-gray-100">
+
+                    <td class="py-3 px-4">{{ forloop.counter }}</td>
+
+                    <td class="py-3 px-4 font-medium">{{ u.name }}</td>
+
+                    <td class="py-3 px-4">{{ u.username }}</td>
+
+                    <td class="py-3 px-4">{{ u.email }}</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    {% else %}
+        <div class="bg-yellow-100 text-yellow-700 p-4 mt-4 rounded text-center">
+            No registered users found.
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Wildlife Admin Login</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+<style>
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.wildlife-bg {
+    background-image: url('https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+}
+.backdrop {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+}
+</style>
+</head>
+
+<body class="wildlife-bg font-display min-h-screen flex flex-col justify-center items-center">
+
+<header class="absolute top-6 left-6 flex items-center gap-3">
+  <span class="material-symbols-outlined text-secondary text-4xl">eco</span>
+  <span class="text-3xl font-bold text-white drop-shadow-lg">Wildlife Admin</span>
+</header>
+
+<main class="w-full max-w-md p-8 backdrop rounded-xl shadow-lg border border-green-100">
+
+  <div class="text-center mb-8">
+    <h1 class="text-4xl font-extrabold text-primary tracking-tight">Login</h1>
+    <p class="text-gray-600">Choose your role to continue</p>
+  </div>
+
+  <form method="POST" class="flex flex-col gap-6">
+    {% csrf_token %}
+
+    <!-- SELECT ROLE -->
+    <label class="flex flex-col">
+        <p class="pb-2 text-base font-medium text-gray-800">Login As</p>
+        <select name="login_type" id="login_type"
+            class="form-input rounded-lg border border-green-200 p-3 focus:ring-2 focus:ring-secondary/50 h-12"
+            onchange="toggleLoginFields()">
+            <option value="admin">Admin</option>
+            <option value="officer">Forest Officer</option>
+        </select>
+    </label>
+
+  <!-- ADMIN FIELDS -->
+<div id="admin_fields">
+    <label class="flex flex-col">
+        <p class="pb-2 text-base font-medium text-gray-800">Email</p>
+        <input name="email" type="email" placeholder="admin@gmail.com"
+            class="form-input rounded-lg p-3 h-12" />
+    </label>
+
+    <label class="flex flex-col">
+        <p class="pb-2 text-base font-medium text-gray-800">Password</p>
+        <input name="admin_password" type="password" placeholder="Admin Password"
+            class="form-input rounded-lg p-3 h-12" />
+    </label>
+</div>
+
+<!-- OFFICER FIELDS (UNCHANGED) -->
+<div id="officer_fields" style="display:none;">
+    <label class="flex flex-col">
+        <p class="pb-2 text-base font-medium text-gray-800">Officer ID</p>
+        <input name="officer_id" type="text" placeholder="FO-101"
+            class="form-input rounded-lg p-3 h-12" />
+    </label>
+
+    <label class="flex flex-col">
+        <p class="pb-2 text-base font-medium text-gray-800">Password</p>
+        <input name="password" type="password" placeholder="Enter password"
+            class="form-input rounded-lg p-3 h-12" />
+    </label>
+</div>
+
+
+    <button type="submit" class="mt-4 bg-primary hover:bg-green-700 text-white font-semibold py-3 rounded-lg shadow-wild">
+        Login
+    </button>
+</form>
+
+<script>
+function toggleLoginFields() {
+    let type = document.getElementById("login_type").value;
+
+    document.getElementById("admin_fields").style.display = type === "admin" ? "block" : "none";
+    document.getElementById("officer_fields").style.display = type === "officer" ? "block" : "none";
+}
+</script>
+
+</main>
+
+<footer class="mt-8 text-center">
+  <p class="text-sm text-green-100">© 2025 WildSpotter Admin Portal. All Rights Reserved.</p>
+</footer>
+
+<script>
+document.getElementById("roleSelect").addEventListener("change", function () {
+    let role = this.value;
+
+    if (role === "admin") {
+        document.getElementById("adminFields").classList.remove("hidden");
+        document.getElementById("officerFields").classList.add("hidden");
+    } else {
+        document.getElementById("adminFields").classList.add("hidden");
+        document.getElementById("officerFields").classList.remove("hidden");
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+{% extends 'officer_module/officer_dashboard.html' %}
+{% load static %}
+{% load average %}
+
+{% block title %}Recent Sightings | Officer{% endblock %}
+
+{% block content %}
+
+<div class="max-w-7xl mx-auto p-6">
+
+    <h2 class="text-3xl font-bold text-green-700 mb-6">
+        Recent Sightings in {{ officer.sanctuary.name }}
+    </h2>
+
+    {% if sightings %}
+    <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+
+        <table class="w-full border-collapse">
+            <thead>
+                <tr class="bg-green-700 text-white text-left">
+                    <th class="py-3 px-4">#</th>
+                    <th class="py-3 px-4">User</th>
+                    <th class="py-3 px-4">Species</th>
+                    <th class="py-3 px-4">Scientific</th>
+                    <th class="py-3 px-4">Notes</th>
+                    <th class="py-3 px-4">Image</th>
+                    <th class="py-3 px-4">Video</th>
+                    <th class="py-3 px-4">Date</th>
+                    <th class="py-3 px-4 text-center">Ratings</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for s in sightings %}
+                <tr class="border-b hover:bg-gray-100">
+
+                    <td class="py-3 px-4">{{ forloop.counter }}</td>
+
+                    <td class="py-3 px-4">{{ s.user.username }}</td>
+
+                    <td class="py-3 px-4 font-semibold">{{ s.species }}</td>
+
+                    <td class="py-3 px-4 italic">{{ s.Scientific_name }}</td>
+
+                    <td class="py-3 px-4 max-w-xs">{{ s.notes|default:"—" }}</td>
+
+                    <!-- Image -->
+                    <td class="py-3 px-4">
+                        {% if s.image %}
+                        <img src="{{ s.image.url }}" class="h-16 w-20 object-cover rounded border">
+                        {% else %}
+                        <span class="text-gray-500">No Image</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Video -->
+                    <td class="py-3 px-4">
+                        {% if s.video %}
+                        <video width="120" class="rounded border" controls>
+                            <source src="{{ s.video.url }}" type="video/mp4">
+                        </video>
+                        {% else %}
+                        <span class="text-gray-500">No Video</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="py-3 px-4">{{ s.created_at|date:"M d, Y h:i A" }}</td>
+
+                    <!-- ⭐ Ratings -->
+                    <td class="py-3 px-4 text-center">
+                        {% with s.ratings.all as rating_list %}
+                            {% if rating_list %}
+                                {% with rating_list|avg:"rating" as avg_rating %}
+                                    <span class="text-yellow-600 font-bold text-lg">
+                                        {{ avg_rating|floatformat:1 }}★
+                                    </span>
+                                {% endwith %}
+                                <br>
+                                <span class="text-gray-600 text-sm">
+                                    ({{ rating_list.count }} ratings)
+                                </span>
+                            {% else %}
+                                <span class="text-gray-400 italic">No ratings</span>
+                            {% endif %}
+                        {% endwith %}
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+    {% else %}
+    <p class="text-center text-gray-600 mt-6">No sightings in this sanctuary.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

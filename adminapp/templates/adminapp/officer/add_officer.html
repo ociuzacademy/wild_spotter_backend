@@ -1,0 +1,71 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10 bg-white shadow-lg rounded-lg p-8">
+
+    <h2 class="text-3xl font-bold text-green-700 text-center mb-6">Add Forest Officer</h2>
+
+    {% include 'includes/_messages.html' %}
+
+    <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 gap-6">
+        {% csrf_token %}
+        <div>
+            <label class="font-semibold">Assign Sanctuary</label>
+            <select name="sanctuary" required
+                class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-green-600">
+                <option value="">-- Select Sanctuary --</option>
+                {% for s in sanctuaries %}
+                <option value="{{ s.id }}">{{ s.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <div>
+            <label class="font-semibold">Officer ID / Username</label>
+            <input type="text" name="officer_id" required
+                class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-green-600">
+        </div>
+
+        <div>
+            <label class="font-semibold">Officer Name</label>
+            <input type="text" name="name" required
+                class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-green-600">
+        </div>
+
+        <div>
+            <label class="font-semibold">Email</label>
+            <input type="email" name="email" required
+                class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-green-600">
+        </div>
+
+        <div>
+            <label class="font-semibold">Phone Number</label>
+            <input type="text" name="phone" required
+                class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-green-600">
+        </div>
+
+        <div>
+            <label class="font-semibold">Password</label>
+            <input type="password" name="password" required
+                class="w-full border rounded-md px-4 py-2 mt-1 focus:ring-2 focus:ring-green-600">
+        </div>
+
+        <div>
+            <label class="font-semibold">Profile Image</label>
+            <input type="file" name="profile_image" class="w-full border rounded-md px-4 py-2 mt-1">
+        </div>
+
+        <div>
+            <label class="font-semibold">ID Card Image</label>
+            <input type="file" name="id_card_image" class="w-full border rounded-md px-4 py-2 mt-1">
+        </div>
+
+        <button class="bg-green-700 hover:bg-green-800 text-white py-3 rounded-md font-bold shadow">
+            Add Officer
+        </button>
+    </form>
+
+</div>
+{% endblock %}

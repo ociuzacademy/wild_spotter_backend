@@ -1,0 +1,79 @@
+{% extends "officer_module/base_officer.html" %}
+{% load static %}
+
+{% block title %}Officer Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="text-center mb-10">
+  <h2 class="text-4xl font-extrabold text-green-700">🌿 Forest Officer Dashboard</h2>
+  <p class="text-gray-600 mt-2">Manage awareness, monitor sightings & protect wildlife</p>
+</div>
+
+<!-- Stats Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+  <div class="bg-green-50 border-l-8 border-green-700 p-6 rounded-lg shadow">
+    <h3 class="text-lg font-semibold text-gray-700">Awareness Posters</h3>
+    <p class="text-4xl font-bold text-green-800 mt-3">{{ poster_count }}</p>
+  </div>
+
+  <div class="bg-green-50 border-l-8 border-green-700 p-6 rounded-lg shadow">
+    <h3 class="text-lg font-semibold text-gray-700">Educational Videos</h3>
+    <p class="text-4xl font-bold text-green-800 mt-3">{{ video_count }}</p>
+  </div>
+
+  <div class="bg-green-50 border-l-8 border-green-700 p-6 rounded-lg shadow">
+    <h3 class="text-lg font-semibold text-gray-700">Protection Images</h3>
+    <p class="text-4xl font-bold text-green-800 mt-3">{{ protection_img_count }}</p>
+  </div>
+
+</div>
+
+<!-- Latest 3 Sightings -->
+<div class="bg-white p-6 shadow rounded-lg">
+
+  <h3 class="text-2xl font-bold text-green-700 mb-4">
+    🔍 Recent Wildlife Sightings in {{ officer.sanctuary.name }}
+  </h3>
+
+  {% if recent_sightings %}
+  <table class="w-full border border-gray-300">
+    <thead class="bg-green-700 text-white">
+      <tr>
+        <th class="p-3">Species</th>
+        <th class="p-3">User</th>
+        <th class="p-3">Image</th>
+        <th class="p-3">Date</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for s in recent_sightings %}
+      <tr class="border-b hover:bg-gray-100">
+
+        <td class="p-3 font-semibold">{{ s.species }}</td>
+
+        <td class="p-3">{{ s.user.username }}</td>
+
+        <td class="p-3">
+          {% if s.image %}
+          <img src="{{ s.image.url }}" class="h-16 w-20 object-cover rounded">
+          {% else %}
+          —
+          {% endif %}
+        </td>
+
+        <td class="p-3">{{ s.created_at|date:"M d, Y" }}</td>
+
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% else %}
+  <p class="text-center text-gray-600">No sightings recorded yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

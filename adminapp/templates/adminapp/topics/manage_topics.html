@@ -1,0 +1,107 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Manage Topics{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto p-6">
+
+    {% include 'includes/_messages.html' %}
+
+    <!-- ADD / EDIT TOPIC FORM -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <h3 class="text-2xl font-bold text-green-700 text-center mb-4">
+            {% if edit_topic %} Edit Topic {% else %} Add New Topic {% endif %}
+        </h3>
+
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">Topic Name</label>
+                <input type="text"
+                       name="name"
+                       placeholder="Enter topic name"
+                       value="{% if edit_topic %}{{ edit_topic.name }}{% endif %}"
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500"
+                       required>
+            </div>
+
+            <div class="flex justify-end gap-3">
+
+                {% if edit_topic %}
+                <!-- Cancel Button -->
+                <a href="{% url 'manage_topics' %}"
+                   class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                    Cancel
+                </a>
+                {% endif %}
+
+                <!-- Add / Update Button -->
+                <button type="submit"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md">
+                    {% if edit_topic %} Update {% else %} Add {% endif %}
+                </button>
+
+            </div>
+        </form>
+    </div>
+
+    <!-- TOPICS LIST TABLE -->
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h4 class="text-2xl font-semibold text-green-700 mb-4">Topics List</h4>
+
+        {% if topics %}
+        <div class="overflow-x-auto">
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-green-700 text-white text-left">
+                        <th class="py-3 px-4">#</th>
+                        <th class="py-3 px-4">Topic Name</th>
+                        <th class="py-3 px-4">Created</th>
+                        <th class="py-3 px-4 text-center">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for t in topics %}
+                    <tr class="border-b hover:bg-gray-100">
+
+                        <td class="py-3 px-4">{{ forloop.counter }}</td>
+
+                        <td class="py-3 px-4 font-medium">{{ t.name }}</td>
+
+                        <td class="py-3 px-4">{{ t.created_at|date:"Y-m-d H:i" }}</td>
+
+                        <td class="py-3 px-4 text-center">
+                            <div class="flex justify-center gap-4">
+
+                                <!-- Edit -->
+                                <a href="?edit={{ t.id }}"
+                                   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-md text-sm">
+                                    Edit
+                                </a>
+
+                                <!-- Delete -->
+                                <a href="?delete={{ t.id }}"
+                                   onclick="return confirm('Delete this topic?');"
+                                   class="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-md text-sm">
+                                    Delete
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+        {% else %}
+            <p class="text-gray-500 text-center mt-4">No topics yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
