@@ -122,27 +122,22 @@ class JournalSerializer(serializers.ModelSerializer):
             'created_at',
         ]
 
+
+from .models import RecentSighting
 class RecentSightingSerializer(serializers.ModelSerializer):
-    user_name = serializers.CharField(source="user.username", read_only=True)
-    sanctuary_name = serializers.CharField(source="sanctuary.name", read_only=True)
+    average_rating = serializers.SerializerMethodField()
 
     class Meta:
         model = RecentSighting
-        fields = [
-            "id",
-            "user",
-            "user_name",
-            "sanctuary",
-            "sanctuary_name",
-            "species",
-            "Scientific_name",
-            "latitude",
-            "longitude",
-            "notes",
-            "image",
-            "video",
-            "created_at",
-        ]
+        fields = "__all__"
+
+    def get_average_rating(self, obj):
+        from django.db.models import Avg
+        return obj.ratings.aggregate(
+            Avg("rating")
+        )["rating__avg"]
+
+
 
 
 from rest_framework import serializers

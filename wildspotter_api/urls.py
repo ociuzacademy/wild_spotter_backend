@@ -48,7 +48,7 @@ urlpatterns = [
     path("awareness-posters/<int:sanctuary_id>/", AwarenessPostersBySanctuaryAPI.as_view(), name="api_awareness_posters_by_sanctuary"),
     path("educational-videos/<int:sanctuary_id>/", EducationalVideosBySanctuaryAPI.as_view(), name="api_educational_videos_by_sanctuary"),
     path("rate-sighting/", AddSightingRatingAPI.as_view(), name="rate_sighting"),
-     path("sighting/<int:sighting_id>/ratings/", ViewSightingRatingsAPI.as_view(), name="view_sighting_ratings"),
+    path("sighting/<int:sighting_id>/ratings/", ViewSightingRatingsAPI.as_view(), name="view_sighting_ratings"),
     path("user/<int:user_id>/ratings/", ViewUserRatingsAPI.as_view(), name="view_user_ratings"),
     path("ratings/", ViewAllRatingsAPI.as_view(), name="view_all_ratings"),
     # Swagger documentation

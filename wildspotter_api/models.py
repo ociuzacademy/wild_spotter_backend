@@ -45,6 +45,7 @@ class Journal(models.Model):
         return self.name
 
 from adminapp.models import *
+from django.db.models import Avg
 class RecentSighting(models.Model):
     user = models.ForeignKey(TblRegister, on_delete=models.CASCADE, related_name="sightings")
     sanctuary = models.ForeignKey(TblWildLifeSanctuary, on_delete=models.CASCADE, related_name="sightings")
@@ -68,6 +69,10 @@ class RecentSighting(models.Model):
 
     def __str__(self):
         return f"{self.species} - {self.user.username}"
+
+    @property
+    def average_rating(self):
+        return self.ratings.aggregate(Avg("rating"))["rating__avg"]
 
 # models.py
 from django.db import models

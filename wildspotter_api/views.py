@@ -10,6 +10,11 @@ class UserRegisterViewSet(viewsets.ModelViewSet):
     queryset = TblRegister.objects.all()
     serializer_class = TblRegisterSerializer
 
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        response.status_code = status.HTTP_201_CREATED
+        return response
+
 
 @api_view(['POST'])
 def user_login(request):
