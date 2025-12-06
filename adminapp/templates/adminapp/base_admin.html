@@ -6,10 +6,10 @@
   <title>{% block title %}WildSpotter Admin{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-white text-gray-800">
-  
 
-  <!-- CLEAN NAVBAR -->
+<body class="bg-white text-gray-800">
+
+<!-- NAVBAR -->
 <nav class="bg-green-700 text-white shadow-lg">
   <div class="max-w-7xl mx-auto px-6">
     <div class="flex justify-between items-center h-16">
@@ -23,9 +23,14 @@
         <a href="{% url 'admin_dashboard' %}" class="hover:text-green-200">Dashboard</a>
 
         <!-- MANAGEMENT MENU -->
-        <div class="relative group">
-          <button class="hover:text-green-200">Management ▾</button>
-          <div class="hidden group-hover:block absolute bg-white text-green-700 mt-2 rounded shadow-lg z-10 w-48">
+        <div class="relative">
+          <button onclick="toggleDropdown('managementDropdown')" class="hover:text-green-200">
+            Management ▾
+          </button>
+
+          <div id="managementDropdown"
+               class="dropdown hidden absolute bg-white text-green-700 mt-2 rounded shadow-lg z-10 w-48">
+
             <a href="{% url 'add_wildlife_sanctuary' %}" class="block px-4 py-2 hover:bg-green-100">Add Sanctuary</a>
             <a href="{% url 'list_wildlife_sanctuary' %}" class="block px-4 py-2 hover:bg-green-100">List Sanctuaries</a>
 
@@ -41,9 +46,14 @@
         </div>
 
         <!-- WILDLIFE MENU -->
-        <div class="relative group">
-          <button class="hover:text-green-200">Wildlife ▾</button>
-          <div class="hidden group-hover:block absolute bg-white text-green-700 mt-2 rounded shadow-lg w-48 z-10">
+        <div class="relative">
+          <button onclick="toggleDropdown('wildlifeDropdown')" class="hover:text-green-200">
+            Wildlife ▾
+          </button>
+
+          <div id="wildlifeDropdown"
+               class="dropdown hidden absolute bg-white text-green-700 mt-2 rounded shadow-lg w-48 z-10">
+
             <a href="{% url 'add_animal_category' %}" class="block px-4 py-2 hover:bg-green-100">Add Category</a>
             <a href="{% url 'list_animal_category' %}" class="block px-4 py-2 hover:bg-green-100">List Categories</a>
 
@@ -51,16 +61,23 @@
 
             <a href="{% url 'add_animal' %}" class="block px-4 py-2 hover:bg-green-100">Add Animal</a>
             <a href="{% url 'view_animals' %}" class="block px-4 py-2 hover:bg-green-100">List Animals</a>
+
           </div>
         </div>
 
         <!-- CONTENT MENU -->
-        <div class="relative group">
-          <button class="hover:text-green-200">Content ▾</button>
-          <div class="hidden group-hover:block absolute bg-white text-green-700 mt-2 rounded shadow-lg w-52 z-10">
+        <div class="relative">
+          <button onclick="toggleDropdown('contentDropdown')" class="hover:text-green-200">
+            Content ▾
+          </button>
+
+          <div id="contentDropdown"
+               class="dropdown hidden absolute bg-white text-green-700 mt-2 rounded shadow-lg w-52 z-10">
+
             <a href="{% url 'list_journals' %}" class="block px-4 py-2 hover:bg-green-100">Journal Listing</a>
             <a href="{% url 'admin_view_recent_sightings' %}" class="block px-4 py-2 hover:bg-green-100">Recent Sightings</a>
             <a href="{% url 'manage_topics' %}" class="block px-4 py-2 hover:bg-green-100">Manage Topics</a>
+
           </div>
         </div>
 
@@ -68,45 +85,46 @@
         <a href="{% url 'admin_logout' %}" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">
           Logout
         </a>
-
       </div>
     </div>
   </div>
 </nav>
 
-  <!-- Page Content -->
-  <main class="max-w-7xl mx-auto py-10 px-4">
-    {% block content %}
-    {% endblock %}
-  </main>
-  <br>
-  <br>
-  <br>
+<!-- MAIN PAGE CONTENT -->
+<main class="max-w-7xl mx-auto py-10 px-4">
+  {% block content %}
+  {% endblock %}
+</main>
 
-  <!-- Footer -->
-  <footer class="bg-green-700 text-white py-4 mt-10 text-center">
-    <p class="text-sm">&copy; {{ now|date:"Y" }} WildSpotter Admin Panel. All rights reserved.</p>
-  </footer>
+<br><br><br>
 
-  <!-- JavaScript for Dropdowns -->
-  <script>
-    function toggleDropdown(id) {
-      const dropdown = document.getElementById(id);
-      const allDropdowns = document.querySelectorAll('[id$="Dropdown"]');
-      allDropdowns.forEach(el => {
-        if (el !== dropdown) el.classList.add('hidden'); // Close others
-      });
-      dropdown.classList.toggle('hidden');
-    }
+<!-- FOOTER -->
+<footer class="bg-green-700 text-white py-4 mt-10 text-center">
+  <p class="text-sm">&copy; {{ now|date:"Y" }} WildSpotter Admin Panel. All rights reserved.</p>
+</footer>
 
-    // Close dropdowns when clicking outside
-    window.addEventListener('click', function (e) {
-      const buttons = document.querySelectorAll('button[onclick^="toggleDropdown"]');
-      if (![...buttons].some(btn => btn.contains(e.target))) {
-        document.querySelectorAll('[id$="Dropdown"]').forEach(d => d.classList.add('hidden'));
-      }
+<!-- DROPDOWN JAVASCRIPT -->
+<script>
+function toggleDropdown(id) {
+    document.querySelectorAll('.dropdown').forEach(menu => {
+        if (menu.id !== id) {
+            menu.classList.add('hidden'); // Close others
+        }
     });
-  </script>
+
+    document.getElementById(id).classList.toggle('hidden'); // Toggle selected
+}
+
+// Close all dropdowns if clicking outside
+document.addEventListener('click', function(event) {
+    const isButton = event.target.closest("button");
+    const isDropdown = event.target.closest(".dropdown");
+
+    if (!isButton && !isDropdown) {
+        document.querySelectorAll('.dropdown').forEach(menu => menu.classList.add('hidden'));
+    }
+});
+</script>
 
 </body>
 </html>
