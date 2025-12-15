@@ -44,13 +44,19 @@ urlpatterns = [
     path("wildlife-protection-images/", WildlifeProtectionImagesAPI.as_view(), name="api_wildlife_protection"),
     path("awareness-posters/", AwarenessPostersAPI.as_view(), name="api_awareness_posters"),
     path("educational-videos/", EducationalVideosAPI.as_view(), name="api_educational_videos"),
-    path("wildlife-protection/<int:sanctuary_id>/", WildlifeProtectionBySanctuaryAPI.as_view(), name="api_wildlife_protection_by_sanctuary"),
-    path("awareness-posters/<int:sanctuary_id>/", AwarenessPostersBySanctuaryAPI.as_view(), name="api_awareness_posters_by_sanctuary"),
-    path("educational-videos/<int:sanctuary_id>/", EducationalVideosBySanctuaryAPI.as_view(), name="api_educational_videos_by_sanctuary"),
+    # path("wildlife-protection/<int:sanctuary_id>/", WildlifeProtectionBySanctuaryAPI.as_view(), name="api_wildlife_protection_by_sanctuary"),
+    # path("awareness-posters/<int:sanctuary_id>/", AwarenessPostersBySanctuaryAPI.as_view(), name="api_awareness_posters_by_sanctuary"),
+    # path("educational-videos/<int:sanctuary_id>/", EducationalVideosBySanctuaryAPI.as_view(), name="api_educational_videos_by_sanctuary"),
     path("rate-sighting/", AddSightingRatingAPI.as_view(), name="rate_sighting"),
     path("sighting/<int:sighting_id>/ratings/", ViewSightingRatingsAPI.as_view(), name="view_sighting_ratings"),
     path("user/<int:user_id>/ratings/", ViewUserRatingsAPI.as_view(), name="view_user_ratings"),
     path("ratings/", ViewAllRatingsAPI.as_view(), name="view_all_ratings"),
+
+    
+    path("user/<int:user_id>/communities/", UserViewCommunityByUser.as_view(), name="user_communities"),
+    path("sanctuary/<int:sanctuary_id>/resources/", SanctuaryResourcesAPIView.as_view(), name="sanctuary_resources"),
+
+
     # Swagger documentation
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

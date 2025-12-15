@@ -89,6 +89,41 @@ class CommunitySerializer(serializers.ModelSerializer):
 
 
 
+
+from rest_framework import serializers
+from adminapp.models import Community
+
+class UserCommunitySerializer(serializers.ModelSerializer):
+    sanctuary_name = serializers.CharField(source='sanctuary.name', read_only=True)
+    picture_url = serializers.SerializerMethodField()
+    joined = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Community
+        fields = [
+            'id',
+            'name',
+            'sanctuary',
+            'sanctuary_name',
+            'picture_url',
+            'members',
+            'joined',
+            'created_at',
+        ]
+
+    def get_picture_url(self, obj):
+        if obj.picture:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.picture.url) if request else obj.picture.url
+        return None
+
+    def get_joined(self, obj):
+        user_id = self.context.get('user_id')
+        if not user_id:
+            return False
+        return obj.joined_users.filter(id=user_id).exists()
+
+
 from rest_framework import serializers
 from adminapp.models import Topic
 
@@ -222,3 +257,7 @@ class SightingRatingSerializer(serializers.ModelSerializer):
 
     def get_average_rating(self, obj):
         return obj.sighting.ratings.aggregate(models.Avg("rating"))["rating__avg"]
+
+
+
+

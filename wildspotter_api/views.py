@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import *
-from .serializers import  TblRegisterSerializer
+from .serializers import  TblRegisterSerializer, UserCommunitySerializer
 
 
 class UserRegisterViewSet(viewsets.ModelViewSet):
@@ -299,12 +299,24 @@ def get_published_journals(request):
     }, status=status.HTTP_200_OK)
 
 
+class UserViewCommunityByUser(APIView):
+    """
+    Shows all communities with joined status for a user
+    """
 
+    def get(self, request, user_id):
+        communities = Community.objects.all().order_by('-created_at')
 
+        serializer = UserCommunitySerializer(
+            communities,
+            many=True,
+            context={
+                'request': request,
+                'user_id': user_id
+            }
+        )
 
-
-
-
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 
@@ -715,3 +727,67 @@ class ViewAllRatingsAPI(APIView):
         ratings = SightingRating.objects.all()
         serializer = SightingRatingSerializer(ratings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from adminapp.models import (
+    TblSanctuaryImage,
+    WildlifeProtectionImage,
+    AwarenessPoster,
+    EducationalVideo
+)
+
+from .serializers import (
+    SanctuaryImageSerializer,
+    WildlifeProtectionImageSerializer,
+    AwarenessPosterSerializer,
+    EducationalVideoSerializer
+)
+
+
+class SanctuaryResourcesAPIView(APIView):
+    """
+    Returns all sanctuary-related content under a single API
+    """
+
+    def get(self, request, sanctuary_id):
+
+        sanctuary_images = TblSanctuaryImage.objects.filter(
+            sanctuary_id=sanctuary_id
+        )
+
+        awareness_posters = AwarenessPoster.objects.filter(
+            officer__sanctuary_id=sanctuary_id
+        )
+
+        educational_videos = EducationalVideo.objects.filter(
+            officer__sanctuary_id=sanctuary_id
+        )
+
+        wildlife_images = WildlifeProtectionImage.objects.filter(
+            officer__sanctuary_id=sanctuary_id
+        )
+
+        response_data = {
+            "sanctuary_images": SanctuaryImageSerializer(
+                sanctuary_images, many=True, context={"request": request}
+            ).data,
+
+            "awareness_posters": AwarenessPosterSerializer(
+                awareness_posters, many=True, context={"request": request}
+            ).data,
+
+            "educational_videos": EducationalVideoSerializer(
+                educational_videos, many=True, context={"request": request}
+            ).data,
+
+            "wildlife_protection_images": WildlifeProtectionImageSerializer(
+                wildlife_images, many=True, context={"request": request}
+            ).data,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
