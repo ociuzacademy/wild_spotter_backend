@@ -1,0 +1,81 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}{{ animal.name }} Details{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-6">
+
+    <!-- Animal Image -->
+    {% if animal.image %}
+    <div class="mb-6">
+        <img src="{{ animal.image.url }}"
+             alt="{{ animal.name }}"
+             class="w-full h-80 object-cover rounded-xl border-4 border-gray-300 shadow-md">
+    </div>
+    {% endif %}
+
+    <!-- Title -->
+    <h2 class="text-3xl font-bold text-green-700 text-center mb-2">
+        {{ animal.name }}
+    </h2>
+
+    <!-- Scientific Name -->
+    {% if animal.scientific_name %}
+    <p class="text-center text-gray-500 italic mb-6">
+        {{ animal.scientific_name }}
+    </p>
+    {% endif %}
+
+    <!-- Info Card -->
+    <div class="bg-white shadow-lg rounded-lg p-6 space-y-4">
+
+        <!-- 2 Column Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div class="space-y-2">
+                <p><span class="font-semibold text-gray-800">Category:</span> {{ animal.category.name }}</p>
+                <p><span class="font-semibold text-gray-800">Habitat:</span> {{ animal.habitat|default:"Not specified" }}</p>
+                <p><span class="font-semibold text-gray-800">Diet:</span> {{ animal.diet|default:"Not specified" }}</p>
+                <p><span class="font-semibold text-gray-800">Size:</span> {{ animal.size|default:"Not specified" }}</p>
+                <p><span class="font-semibold text-gray-800">Weight:</span> {{ animal.weight|default:"Not specified" }}</p>
+            </div>
+
+            <div class="space-y-2">
+                <p><span class="font-semibold text-gray-800">Lifespan:</span> {{ animal.lifespan|default:"Not specified" }}</p>
+
+                <p>
+                    <span class="font-semibold text-gray-800">Conservation Status:</span>
+                    <span class="bg-green-700 text-white px-3 py-1 rounded-md text-sm ml-2">
+                        {{ animal.conservation_status }}
+                    </span>
+                </p>
+
+                <p><span class="font-semibold text-gray-800">Conservation Source:</span> {{ animal.conservation_source }}</p>
+                <p><span class="font-semibold text-gray-800">Added On:</span> {{ animal.created_at|date:"M d, Y" }}</p>
+            </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <!-- About -->
+        <div>
+            <h3 class="text-xl font-semibold text-gray-800">About</h3>
+            <p class="text-gray-700 mt-2 leading-relaxed">
+                {{ animal.about|default:"No additional details available." }}
+            </p>
+        </div>
+
+        <!-- Back Button -->
+        <div class="pt-4">
+            <a href="{% url 'view_animals' %}"
+               class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md">
+                ← Back
+            </a>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Add Community{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto">
+
+    <h2 class="text-2xl font-semibold text-green-700 mb-6 text-center">
+        Add Community
+    </h2>
+
+    {% include 'includes/_messages.html' %}
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+
+        <!-- Community Name -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Community Name</label>
+            <input 
+                type="text" 
+                name="name" 
+                placeholder="Enter community name"
+                required
+                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500"
+            >
+        </div>
+
+        <!-- Select Sanctuary -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Select Sanctuary</label>
+            <select 
+                name="sanctuary" 
+                required
+                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500"
+            >
+                <option value="">-- Select Sanctuary --</option>
+                {% for s in sanctuaries %}
+                    <option value="{{ s.id }}">{{ s.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Picture Upload -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Community Picture (optional)</label>
+            <input 
+                type="file" 
+                name="picture"
+                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500"
+            >
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-end space-x-3 pt-4">
+            
+
+            <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md">
+                Add Community
+            </button>
+        </div>
+
+    </form>
+
+</div>
+{% endblock %}

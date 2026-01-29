@@ -1,0 +1,100 @@
+{% extends 'adminapp/base_admin.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard | WildSpotter{% endblock %}
+
+{% block content %}
+
+<!-- Title -->
+<div class="text-center mb-12">
+  <h1 class="text-4xl font-extrabold text-green-700">🌿 Wildlife Admin Dashboard</h1>
+  <p class="text-gray-600 mt-2 text-lg">Monitor wildlife, officers, and activity at a glance</p>
+</div>
+
+<!-- STAT CARDS -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+
+  <!-- Communities -->
+  <div class="bg-white shadow rounded-xl p-6 border border-green-100 hover:shadow-xl transition">
+    <h3 class="text-gray-700 font-semibold mb-2">Total Communities</h3>
+    <p class="text-5xl font-bold text-green-700">{{ total_communities }}</p>
+  </div>
+
+  <!-- Sightings -->
+  <div class="bg-white shadow rounded-xl p-6 border border-green-100 hover:shadow-xl transition">
+    <h3 class="text-gray-700 font-semibold mb-2">Total Sightings</h3>
+    <p class="text-5xl font-bold text-green-700">{{ total_sightings }}</p>
+  </div>
+
+  <!-- Officers -->
+  <div class="bg-white shadow rounded-xl p-6 border border-green-100 hover:shadow-xl transition">
+    <h3 class="text-gray-700 font-semibold mb-2">Forest Officers</h3>
+    <p class="text-5xl font-bold text-green-700">{{ total_officers }}</p>
+  </div>
+
+</div>
+
+<!-- SECOND ROW -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+
+  <!-- Total Journals -->
+  <div class="bg-white shadow rounded-xl p-6 border border-green-100 hover:shadow-xl transition">
+    <h3 class="text-gray-700 font-semibold mb-2">Total Journals</h3>
+    <p class="text-5xl font-bold text-green-700">{{ total_journals }}</p>
+  </div>
+
+  <!-- Published Journals -->
+  <div class="bg-white shadow rounded-xl p-6 border border-green-100 hover:shadow-xl transition">
+    <h3 class="text-gray-700 font-semibold mb-2">Published Journals</h3>
+    <p class="text-5xl font-bold text-green-700">{{ published_journals }}</p>
+  </div>
+
+  <!-- Pending Journals -->
+  <div class="bg-white shadow rounded-xl p-6 border border-green-100 hover:shadow-xl transition">
+    <h3 class="text-gray-700 font-semibold mb-2">Pending Journals</h3>
+    <p class="text-5xl font-bold text-yellow-600">{{ pending_journals }}</p>
+  </div>
+
+</div>
+
+<!-- RECENT JOURNALS -->
+<div class="bg-white border border-green-100 rounded-xl shadow-md p-8">
+  <h3 class="text-2xl font-bold text-green-700 mb-6 flex items-center gap-2">
+    <span class="material-symbols-outlined text-green-700">menu_book</span>
+    Recent Journal Entries
+  </h3>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full border-collapse divide-y divide-green-100">
+      <thead>
+        <tr class="bg-green-700 text-white">
+          <th class="py-3 px-4 text-left font-semibold">Title</th>
+          <th class="py-3 px-4 text-left font-semibold">Author</th>
+          <th class="py-3 px-4 text-left font-semibold">Date</th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-green-100">
+        {% for j in recent_journals %}
+        <tr class="hover:bg-green-50 transition-all">
+          <td class="py-3 px-4">{{ j.name }}</td>
+          <td class="py-3 px-4">{{ j.user.name }}</td>
+          <td class="py-3 px-4">{{ j.created_at|date:"M d, Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3" class="py-4 text-center text-gray-500">No recent journals.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="mt-8 text-center text-gray-500 text-sm">
+  Last updated: <span class="font-medium text-green-700">{{ now|date:"F j, Y" }}</span>
+</div>
+
+{% endblock %}

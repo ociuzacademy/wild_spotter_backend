@@ -1,0 +1,112 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Add Wildlife Sanctuary{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto">
+
+    <h2 class="text-2xl font-semibold text-green-700 mb-6 text-center">
+        Add Wildlife Sanctuary
+    </h2>
+
+    {% include 'includes/_messages.html' %}
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+
+        <!-- Sanctuary Name -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Sanctuary Name</label>
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter name"
+                required
+                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500"
+            >
+        </div>
+
+        <!-- Species Count -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Number of Species</label>
+            <input
+                type="number"
+                name="species_count"
+                placeholder="e.g. 250"
+                required
+                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500"
+            >
+        </div>
+
+        <!-- Area (Hectare) -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Area (in Hectare)</label>
+            <input
+                type="number"
+                name="hectare"
+                placeholder="e.g. 5000"
+                required
+                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500"
+            >
+        </div>
+
+        <!-- Viewpoints -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Number of Viewpoints</label>
+            <input
+                type="number"
+                name="viewpoints"
+                placeholder="e.g. 50"
+                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500"
+            >
+        </div>
+
+        <!-- Visitors per Month -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Visitors per Month</label>
+            <input
+                type="number"
+                name="visitors_per_month"
+                placeholder="e.g. 1200"
+                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500"
+            >
+        </div>
+
+        <!-- About -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">About</label>
+            <textarea
+                name="about"
+                rows="4"
+                placeholder="Write about the sanctuary..."
+                required
+                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500"
+            ></textarea>
+        </div>
+
+        <!-- Upload Images -->
+        <div>
+            <label class="block text-gray-700 font-medium mb-1">Upload Photos</label>
+            <input
+                type="file"
+                name="images"
+                multiple
+                required
+                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500"
+            >
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-end space-x-3 pt-4">
+            
+
+            <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md">
+                Add Sanctuary
+            </button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

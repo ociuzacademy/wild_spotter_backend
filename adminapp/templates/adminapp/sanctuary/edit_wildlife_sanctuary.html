@@ -1,0 +1,68 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Edit Sanctuary{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto p-6">
+
+    <h2 class="text-3xl font-bold text-green-700 text-center mb-6">
+        Edit {{ sanctuary.name }}
+    </h2>
+
+    {% include 'includes/_messages.html' %}
+
+    <form method="POST" class="bg-white shadow-md rounded-lg p-6 space-y-4">
+        {% csrf_token %}
+
+        <div>
+            <label class="block font-medium mb-1">Sanctuary Name</label>
+            <input type="text" name="name" value="{{ sanctuary.name }}" required
+                   class="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">
+        </div>
+
+        <div>
+            <label class="block font-medium mb-1">Species Count</label>
+            <input type="number" name="species_count" value="{{ sanctuary.species_count }}"
+                   class="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">
+        </div>
+
+        <div>
+            <label class="block font-medium mb-1">Hectare</label>
+            <input type="number" name="hectare" value="{{ sanctuary.hectare }}"
+                   class="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">
+        </div>
+
+        <div>
+            <label class="block font-medium mb-1">Viewpoints</label>
+            <input type="number" name="viewpoints" value="{{ sanctuary.viewpoints }}"
+                   class="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">
+        </div>
+
+        <div>
+            <label class="block font-medium mb-1">Visitors Per Month</label>
+            <input type="number" name="visitors_per_month" value="{{ sanctuary.visitors_per_month }}"
+                   class="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">
+        </div>
+
+        <div>
+            <label class="block font-medium mb-1">About</label>
+            <textarea name="about" rows="4"
+                      class="w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-green-500">{{ sanctuary.about }}</textarea>
+        </div>
+
+        <div class="flex justify-between pt-4">
+            <a href="{% url 'list_wildlife_sanctuary' %}"
+               class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md">
+                Save Changes
+            </button>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

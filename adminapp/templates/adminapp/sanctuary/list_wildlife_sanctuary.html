@@ -1,0 +1,85 @@
+{% extends 'adminapp/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Wildlife Sanctuaries{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6">
+
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-green-700">Wildlife Sanctuaries</h2>
+
+        <a href="{% url 'add_wildlife_sanctuary' %}"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow">
+            + Add Sanctuary
+        </a>
+    </div>
+
+    {% if sanctuaries %}
+    <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+
+        <table class="w-full border-collapse">
+            <thead>
+                <tr class="bg-green-700 text-white text-left">
+                    <th class="py-3 px-4">#</th>
+                    <th class="py-3 px-4">Name</th>
+                    <th class="py-3 px-4">Species Count</th>
+                    <th class="py-3 px-4">Visitors / Month</th>
+                    <th class="py-3 px-4 text-center">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for s in sanctuaries %}
+                <tr class="border-b hover:bg-gray-100">
+
+                    <td class="py-3 px-4">{{ forloop.counter }}</td>
+
+                    <td class="py-3 px-4 font-semibold">{{ s.name }}</td>
+
+                    <td class="py-3 px-4">{{ s.species_count }}</td>
+
+                    <td class="py-3 px-4">{{ s.visitors_per_month }}</td>
+
+                    <td class="py-3 px-4 text-center">
+    <div class="flex justify-center gap-3">
+
+        <!-- View Button -->
+        <a href="{% url 'view_sanctuary_details' s.id %}"
+           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition">
+            View
+        </a>
+
+        <!-- Edit Button -->
+        <a href="{% url 'edit_wildlife_sanctuary' s.id %}"
+           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition">
+            Edit
+        </a>
+
+        <!-- Delete Button -->
+        <a href="{% url 'delete_wildlife_sanctuary' s.id %}"
+           onclick="return confirm('Are you sure you want to delete this sanctuary?');"
+           class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
+            Delete
+        </a>
+
+    </div>
+</td>
+
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+    <div class="bg-yellow-100 text-yellow-700 p-4 mt-6 text-center rounded-lg">
+        No sanctuaries found.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

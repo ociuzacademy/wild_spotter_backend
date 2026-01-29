@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}WildSpotter Admin{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-white text-gray-800">
+
+<!-- NAVBAR -->
+<nav class="bg-green-700 text-white shadow-lg">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex justify-between items-center h-16">
+
+      <!-- LOGO -->
+      <h1 class="text-2xl font-bold">🌿 WildSpotter</h1>
+
+      <!-- MENU ITEMS -->
+      <div class="flex items-center space-x-6">
+
+        <a href="{% url 'admin_dashboard' %}" class="hover:text-green-200">Dashboard</a>
+
+        <!-- MANAGEMENT MENU -->
+        <div class="relative">
+          <button onclick="toggleDropdown('managementDropdown')" class="hover:text-green-200">
+            Management ▾
+          </button>
+
+          <div id="managementDropdown"
+               class="dropdown hidden absolute bg-white text-green-700 mt-2 rounded shadow-lg z-10 w-48">
+
+            <a href="{% url 'add_wildlife_sanctuary' %}" class="block px-4 py-2 hover:bg-green-100">Add Sanctuary</a>
+            <a href="{% url 'list_wildlife_sanctuary' %}" class="block px-4 py-2 hover:bg-green-100">List Sanctuaries</a>
+
+            <hr>
+
+            <a href="{% url 'add_forest_officer' %}" class="block px-4 py-2 hover:bg-green-100">Add Officer</a>
+            <a href="{% url 'list_forest_officers' %}" class="block px-4 py-2 hover:bg-green-100">List Officers</a>
+
+            <hr>
+            <a href="{% url 'add_community' %}" class="block px-4 py-2 hover:bg-green-100">Add Community</a>
+            <a href="{% url 'list_community' %}" class="block px-4 py-2 hover:bg-green-100">List Communities</a>
+            <hr>
+
+            <a href="{% url 'view_users' %}" class="block px-4 py-2 hover:bg-green-100">Users</a>
+          </div>
+        </div>
+
+        <!-- WILDLIFE MENU -->
+        <div class="relative">
+          <button onclick="toggleDropdown('wildlifeDropdown')" class="hover:text-green-200">
+            Wildlife ▾
+          </button>
+
+          <div id="wildlifeDropdown"
+               class="dropdown hidden absolute bg-white text-green-700 mt-2 rounded shadow-lg w-48 z-10">
+
+            <a href="{% url 'add_animal_category' %}" class="block px-4 py-2 hover:bg-green-100">Add Category</a>
+            <a href="{% url 'list_animal_category' %}" class="block px-4 py-2 hover:bg-green-100">List Categories</a>
+
+            <hr>
+
+            <a href="{% url 'add_animal' %}" class="block px-4 py-2 hover:bg-green-100">Add Animal</a>
+            <a href="{% url 'view_animals' %}" class="block px-4 py-2 hover:bg-green-100">List Animals</a>
+            
+
+          </div>
+        </div>
+
+        <!-- CONTENT MENU -->
+        <div class="relative">
+          <button onclick="toggleDropdown('contentDropdown')" class="hover:text-green-200">
+            Content ▾
+          </button>
+
+          <div id="contentDropdown"
+               class="dropdown hidden absolute bg-white text-green-700 mt-2 rounded shadow-lg w-52 z-10">
+
+            <a href="{% url 'list_journals' %}" class="block px-4 py-2 hover:bg-green-100">Journal Listing</a>
+            <a href="{% url 'admin_view_recent_sightings' %}" class="block px-4 py-2 hover:bg-green-100">Recent Sightings</a>
+            <a href="{% url 'manage_topics' %}" class="block px-4 py-2 hover:bg-green-100">Manage Topics</a>
+
+          </div>
+        </div>
+
+        <!-- LOGOUT -->
+        <a href="{% url 'admin_logout' %}" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">
+          Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN PAGE CONTENT -->
+<main class="max-w-7xl mx-auto py-10 px-4">
+  {% block content %}
+  {% endblock %}
+</main>
+
+<br><br><br>
+
+<!-- FOOTER -->
+<footer class="bg-green-700 text-white py-4 mt-10 text-center">
+  <p class="text-sm">&copy; {{ now|date:"Y" }} WildSpotter Admin Panel. All rights reserved.</p>
+</footer>
+
+<!-- DROPDOWN JAVASCRIPT -->
+<script>
+function toggleDropdown(id) {
+    document.querySelectorAll('.dropdown').forEach(menu => {
+        if (menu.id !== id) {
+            menu.classList.add('hidden'); // Close others
+        }
+    });
+
+    document.getElementById(id).classList.toggle('hidden'); // Toggle selected
+}
+
+// Close all dropdowns if clicking outside
+document.addEventListener('click', function(event) {
+    const isButton = event.target.closest("button");
+    const isDropdown = event.target.closest(".dropdown");
+
+    if (!isButton && !isDropdown) {
+        document.querySelectorAll('.dropdown').forEach(menu => menu.classList.add('hidden'));
+    }
+});
+</script>
+
+</body>
+</html>
