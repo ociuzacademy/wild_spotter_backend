@@ -791,3 +791,37 @@ class SanctuaryResourcesAPIView(APIView):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
+
+
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+class ForestOfficersBySanctuaryAPIView(APIView):
+    """API view to return forest officers' names, phone numbers, and count for a sanctuary."""
+
+    def get(self, request, sanctuary_id):
+        from adminapp.models import ForestOfficer
+
+        officers_qs = ForestOfficer.objects.filter(sanctuary_id=sanctuary_id)
+        officer_count = officers_qs.count()
+
+        officers_data = []
+
+        for officer in officers_qs:
+            officers_data.append({
+                "name": officer.name,
+                "phone": officer.phone
+            })
+
+        return Response(
+            {
+                "sanctuary_id": sanctuary_id,
+                "officer_count": officer_count,
+                "officers": officers_data
+            },
+            status=status.HTTP_200_OK,
+        )

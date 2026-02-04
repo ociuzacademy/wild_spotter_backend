@@ -51,12 +51,9 @@ urlpatterns = [
     path("sighting/<int:sighting_id>/ratings/", ViewSightingRatingsAPI.as_view(), name="view_sighting_ratings"),
     path("user/<int:user_id>/ratings/", ViewUserRatingsAPI.as_view(), name="view_user_ratings"),
     path("ratings/", ViewAllRatingsAPI.as_view(), name="view_all_ratings"),
-
-    
     path("user/<int:user_id>/communities/", UserViewCommunityByUser.as_view(), name="user_communities"),
     path("sanctuary/<int:sanctuary_id>/resources/", SanctuaryResourcesAPIView.as_view(), name="sanctuary_resources"),
-
-
+    path('get_foreset_officers_by_sanctuary/<int:sanctuary_id>/', views.ForestOfficersBySanctuaryAPIView.as_view(), name='get_forest_officers_by_sanctuary'),
     # Swagger documentation
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
