@@ -7,7 +7,7 @@
 <div class="max-w-3xl mx-auto bg-white p-6 shadow rounded-lg">
 
     <h2 class="text-2xl font-bold text-green-700 mb-4">Upload Wildlife Protection Image</h2>
-
+  {% include 'includes/_messages.html' %}
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 

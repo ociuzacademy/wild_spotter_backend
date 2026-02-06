@@ -704,7 +704,9 @@ def forest_dashboard(request):
         "recent_sightings": recent_sightings,
     })
 
-
+#----------------------------
+#Forest Profile Management
+#---------------------------
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import ForestOfficer
@@ -790,12 +792,14 @@ def officer_recent_sightings(request):
     })
 
 
-
+#----------------------------
+#Forest manage Awareness Posters
+#---------------------------
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from adminapp.models import ForestOfficer
-from .models import AwarenessPoster  # adjust import if needed
+from .models import AwarenessPoster  
 
 def add_awareness_poster(request):
 
@@ -891,6 +895,10 @@ def delete_awareness_poster(request, poster_id):
 
     return redirect("list_awareness_posters")
 
+
+#----------------------------
+#Forest manage Educational Videos
+#---------------------------
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from adminapp.models import EducationalVideo, ForestOfficer
@@ -974,7 +982,9 @@ def delete_educational_video(request, video_id):
 
 
 
-
+#----------------------------
+#Forest Manage Wildlife Protection Images
+#---------------------------
 
 # views.py
 from django.shortcuts import render, redirect, get_object_or_404
@@ -1043,3 +1053,111 @@ def delete_protection_image(request, image_id):
     img.delete()
     messages.success(request, "Deleted successfully!")
     return redirect("list_protection_images")
+
+#----------------------------
+#Forest Manage Rescue Teams  
+#---------------------------
+from django.shortcuts import render, redirect
+from .models import RescueTeam, ForestOfficer
+
+def add_rescue_team(request):
+    # get logged-in officer id from session
+    officer_id = request.session.get('officer_id')
+
+    if not officer_id:
+        return redirect('admin_officer_login')  
+
+    officer = ForestOfficer.objects.get(id=officer_id)
+
+    if request.method == 'POST':
+        team_name = request.POST.get('team_name')
+        leader_name = request.POST.get('leader_name')
+        contact_number = request.POST.get('contact_number')
+        members_count = request.POST.get('members_count', 0)
+        notes = request.POST.get('notes')
+
+        RescueTeam.objects.create(
+            officer=officer,
+            team_name=team_name,
+            leader_name=leader_name,
+            contact_number=contact_number,
+            members_count=members_count,
+            notes=notes
+        )
+
+        return redirect('list_rescue_teams')  # or officer_dashboard
+
+    return render(request, 'officer_module/rescue_team/add_rescue_team.html')
+
+from django.shortcuts import render, redirect
+from .models import RescueTeam, ForestOfficer
+
+def list_rescue_teams(request):
+    officer_id = request.session.get('officer_id')
+
+    if not officer_id:
+        return redirect('admin_officer_login')
+
+    officer = ForestOfficer.objects.get(id=officer_id)
+
+    rescue_teams = RescueTeam.objects.filter(officer=officer)
+
+    context = {
+        'rescue_teams': rescue_teams
+    }
+    return render(request, 'officer_module/rescue_team/list_rescue_teams.html', context)
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import RescueTeam, ForestOfficer
+
+# EDIT RESCUE TEAM
+def edit_rescue_team(request, team_id):
+    officer_id = request.session.get('officer_id')
+    if not officer_id:
+        return redirect('admin_officer_login')
+
+    officer = ForestOfficer.objects.get(id=officer_id)
+
+    team = get_object_or_404(
+        RescueTeam,
+        id=team_id,
+        officer=officer   # security: only own teams
+    )
+
+    if request.method == 'POST':
+        team.team_name = request.POST.get('team_name')
+        team.leader_name = request.POST.get('leader_name')
+        team.contact_number = request.POST.get('contact_number')
+        team.members_count = request.POST.get('members_count', 0)
+        team.notes = request.POST.get('notes')
+        team.save()
+
+        return redirect('list_rescue_teams')
+
+    return render(request, 'officer_module/rescue_team/edit_rescue_team.html', {
+        'team': team
+    })
+
+# DELETE RESCUE TEAM
+from django.shortcuts import redirect, get_object_or_404
+from .models import RescueTeam, ForestOfficer
+
+def delete_rescue_team(request, team_id):
+    officer_id = request.session.get('officer_id')
+    if not officer_id:
+        return redirect('admin_officer_login')
+
+    officer = ForestOfficer.objects.get(id=officer_id)
+
+    team = get_object_or_404(
+        RescueTeam,
+        id=team_id,
+        officer=officer
+    )
+
+    if request.method == 'POST':
+        team.delete()
+
+    return redirect('list_rescue_teams')

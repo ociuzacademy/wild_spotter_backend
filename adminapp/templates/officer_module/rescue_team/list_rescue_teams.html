@@ -1,0 +1,84 @@
+{% extends "officer_module/officer_dashboard.html" %}
+{% load static %}
+
+{% block title %}Rescue Teams{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow">
+
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-green-700">
+            Rescue Teams
+        </h2>
+        
+
+        <a href="{% url 'add_rescue_team' %}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            + Add Rescue Team
+        </a>
+    </div>
+     {% include 'includes/_messages.html' %}
+      {% if rescue_teams %}
+    <div class="overflow-x-auto">
+        <table class="w-full border border-gray-300">
+            <thead class="bg-green-700 text-white">
+                <tr>
+                    <th class="p-3">#</th>
+                    <th class="p-3">Team Name</th>
+                    <th class="p-3">Leader</th>
+                    <th class="p-3">Contact</th>
+                    <th class="p-3 text-center">Members</th>
+                    <th class="p-3">Notes</th>
+                    <th class="p-3">Sanctuary</th>
+                    <th class="p-3 text-center">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for team in rescue_teams %}
+                <tr class="border-b hover:bg-gray-100">
+
+                    <td class="p-3">{{ forloop.counter }}</td>
+                    <td class="p-3 font-semibold">{{ team.team_name }}</td>
+                    <td class="p-3">{{ team.leader_name }}</td>
+                    <td class="p-3">{{ team.contact_number }}</td>
+                    <td class="p-3 text-center">{{ team.members_count }}</td>
+
+                    <td class="p-3 max-w-xs truncate">
+                        {{ team.notes|default:"—" }}
+                    </td>
+
+                    <td class="p-3">
+                        {{ team.officer.sanctuary.name|default:"—" }}
+                    </td>
+
+                    <td class="p-3 text-center space-x-2">
+                        <a href="{% url 'edit_rescue_team' team.id %}">
+                            <button class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                                Edit
+                            </button>
+                        </a>
+
+                        <form method="POST" action="{% url 'delete_rescue_team' team.id %}" class="inline"
+                            onsubmit="return confirm('Delete this rescue team?');">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+                                Delete
+                            </button>
+                        </form>
+
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <p class="text-center text-gray-500 mt-6">
+        No rescue teams added yet.
+    </p>
+    {% endif %}
+
+</div>
+{% endblock %}

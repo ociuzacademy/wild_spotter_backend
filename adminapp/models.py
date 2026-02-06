@@ -336,3 +336,32 @@ class WildlifeProtectionImage(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+from django.db import models
+from django.utils import timezone
+
+class RescueTeam(models.Model):
+    officer = models.ForeignKey(
+        ForestOfficer,
+        on_delete=models.CASCADE,
+        related_name='rescue_teams'
+    )
+
+    team_name = models.CharField(max_length=150)
+    leader_name = models.CharField(max_length=150)
+    contact_number = models.CharField(max_length=15)
+
+    members_count = models.PositiveIntegerField(default=0)
+
+    notes = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "rescue_teams"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.team_name} ({self.officer.name})"

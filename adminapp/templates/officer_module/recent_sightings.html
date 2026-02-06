@@ -11,82 +11,147 @@
     <h2 class="text-3xl font-bold text-green-700 mb-6">
         Recent Sightings in {{ officer.sanctuary.name }}
     </h2>
+      {% include 'includes/_messages.html' %}
 
     {% if sightings %}
     <div class="bg-white shadow-md rounded-lg overflow-x-auto">
 
         <table class="w-full border-collapse">
-            <thead>
-                <tr class="bg-green-700 text-white text-left">
-                    <th class="py-3 px-4">#</th>
-                    <th class="py-3 px-4">User</th>
-                    <th class="py-3 px-4">Species</th>
-                    <th class="py-3 px-4">Scientific</th>
-                    <th class="py-3 px-4">Notes</th>
-                    <th class="py-3 px-4">Image</th>
-                    <th class="py-3 px-4">Video</th>
-                    <th class="py-3 px-4">Date</th>
-                    <th class="py-3 px-4 text-center">Ratings</th>
-                </tr>
-            </thead>
+           <thead>
+    <tr class="bg-green-700 text-white text-left">
+        <th class="py-3 px-4">#</th>
+        <th class="py-3 px-4">User</th>
+        <th class="py-3 px-4">Species</th>
+        <th class="py-3 px-4">Scientific</th>
+        <th class="py-3 px-4">Image</th>
+        <th class="py-3 px-4">Video</th>
+        <th class="py-3 px-4">Date</th>
+        <th class="py-3 px-4 text-center">Ratings</th>
+        <th class="py-3 px-4 text-center">Action</th>
+    </tr>
+</thead>
+
 
             <tbody>
                 {% for s in sightings %}
-                <tr class="border-b hover:bg-gray-100">
+<tr class="border-b hover:bg-gray-100">
 
-                    <td class="py-3 px-4">{{ forloop.counter }}</td>
+    <td class="py-3 px-4">{{ forloop.counter }}</td>
+    <td class="py-3 px-4">{{ s.user.username }}</td>
+    <td class="py-3 px-4 font-semibold">{{ s.species }}</td>
+    <td class="py-3 px-4 italic">{{ s.Scientific_name }}</td>
 
-                    <td class="py-3 px-4">{{ s.user.username }}</td>
+    <!-- Image -->
+    <td class="py-3 px-4">
+        {% if s.image %}
+        <img src="{{ s.image.url }}" class="h-14 w-20 object-cover rounded border">
+        {% else %}
+        <span class="text-gray-500">—</span>
+        {% endif %}
+    </td>
 
-                    <td class="py-3 px-4 font-semibold">{{ s.species }}</td>
+    <!-- Video -->
+    <td class="py-3 px-4">
+        {% if s.video %}
+        <video width="100" class="rounded border" controls>
+            <source src="{{ s.video.url }}">
+        </video>
+        {% else %}
+        <span class="text-gray-500">—</span>
+        {% endif %}
+    </td>
 
-                    <td class="py-3 px-4 italic">{{ s.Scientific_name }}</td>
+    <td class="py-3 px-4">{{ s.created_at|date:"M d, Y h:i A" }}</td>
 
-                    <td class="py-3 px-4 max-w-xs">{{ s.notes|default:"—" }}</td>
+    <!-- Ratings -->
+    <td class="py-3 px-4 text-center">
+        {% with s.ratings.all as rating_list %}
+            {% if rating_list %}
+                {% with rating_list|avg:"rating" as avg_rating %}
+                    <span class="text-yellow-600 font-bold">
+                        {{ avg_rating|floatformat:1 }}★
+                    </span>
+                {% endwith %}
+            {% else %}
+                <span class="text-gray-400 italic">No ratings</span>
+            {% endif %}
+        {% endwith %}
+    </td>
 
-                    <!-- Image -->
-                    <td class="py-3 px-4">
-                        {% if s.image %}
-                        <img src="{{ s.image.url }}" class="h-16 w-20 object-cover rounded border">
-                        {% else %}
-                        <span class="text-gray-500">No Image</span>
-                        {% endif %}
-                    </td>
+    <!-- Action -->
+    <td class="py-3 px-4 text-center">
+        <button
+            onclick="document.getElementById('sightingModal{{ s.id }}').classList.remove('hidden')"
+            class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+            View
+        </button>
+    </td>
 
-                    <!-- Video -->
-                    <td class="py-3 px-4">
-                        {% if s.video %}
-                        <video width="120" class="rounded border" controls>
-                            <source src="{{ s.video.url }}" type="video/mp4">
-                        </video>
-                        {% else %}
-                        <span class="text-gray-500">No Video</span>
-                        {% endif %}
-                    </td>
+</tr>
+<div id="sightingModal{{ s.id }}"
+     class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
 
-                    <td class="py-3 px-4">{{ s.created_at|date:"M d, Y h:i A" }}</td>
+    <div class="bg-white rounded-lg max-w-2xl w-full mx-4 p-5 shadow-lg
+                max-h-[85vh] overflow-y-auto">
 
-                    <!-- ⭐ Ratings -->
-                    <td class="py-3 px-4 text-center">
-                        {% with s.ratings.all as rating_list %}
-                            {% if rating_list %}
-                                {% with rating_list|avg:"rating" as avg_rating %}
-                                    <span class="text-yellow-600 font-bold text-lg">
-                                        {{ avg_rating|floatformat:1 }}★
-                                    </span>
-                                {% endwith %}
-                                <br>
-                                <span class="text-gray-600 text-sm">
-                                    ({{ rating_list.count }} ratings)
-                                </span>
-                            {% else %}
-                                <span class="text-gray-400 italic">No ratings</span>
-                            {% endif %}
-                        {% endwith %}
-                    </td>
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-green-700">
+                Sighting Details
+            </h3>
+            <button
+                onclick="document.getElementById('sightingModal{{ s.id }}').classList.add('hidden')"
+                class="text-gray-600 hover:text-gray-900 text-xl">
+                ✕
+            </button>
+        </div>
 
-                </tr>
-                {% endfor %}
+        <!-- Content -->
+        <div class="space-y-3 text-sm">
+
+            <p><strong>User:</strong> {{ s.user.username }}</p>
+            <p><strong>Species:</strong> {{ s.species }}</p>
+            <p><strong>Scientific Name:</strong> {{ s.Scientific_name }}</p>
+            <p><strong>Date:</strong> {{ s.created_at|date:"M d, Y h:i A" }}</p>
+
+            {% if s.notes %}
+            <div>
+                <p class="font-semibold">Description / Notes</p>
+                <p class="text-gray-700 whitespace-pre-line">{{ s.notes }}</p>
+            </div>
+            {% endif %}
+
+            {% if s.image %}
+            <div>
+                <p class="font-semibold">Image</p>
+                <img src="{{ s.image.url }}" class="w-full h-48 object-cover rounded border">
+            </div>
+            {% endif %}
+
+            {% if s.video %}
+            <div>
+                <p class="font-semibold">Video</p>
+                <video controls class="w-full rounded border">
+                    <source src="{{ s.video.url }}">
+                </video>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-5 text-right">
+            <button
+                onclick="document.getElementById('sightingModal{{ s.id }}').classList.add('hidden')"
+                class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                Close
+            </button>
+        </div>
+
+    </div>
+</div>
+{% endfor %}
+
             </tbody>
         </table>
 

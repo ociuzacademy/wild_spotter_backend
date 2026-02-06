@@ -1,0 +1,62 @@
+{% extends "officer_module/officer_dashboard.html" %}
+{% load static %}
+
+{% block title %}Edit Rescue Team{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
+
+    <h2 class="text-2xl font-bold text-green-700 mb-6">
+        Edit Rescue Team
+    </h2>
+  {% include 'includes/_messages.html' %}
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-4">
+            <label class="font-semibold">Team Name</label>
+            <input type="text" name="team_name" value="{{ team.team_name }}"
+                   required class="w-full border rounded px-3 py-2">
+        </div>
+
+        <div class="mb-4">
+            <label class="font-semibold">Leader Name</label>
+            <input type="text" name="leader_name" value="{{ team.leader_name }}"
+                   required class="w-full border rounded px-3 py-2">
+        </div>
+
+        <div class="mb-4">
+            <label class="font-semibold">Contact Number</label>
+            <input type="text" name="contact_number"
+                   value="{{ team.contact_number }}"
+                   class="w-full border rounded px-3 py-2">
+        </div>
+
+        <div class="mb-4">
+            <label class="font-semibold">Members Count</label>
+            <input type="number" name="members_count"
+                   value="{{ team.members_count }}"
+                   min="0" class="w-full border rounded px-3 py-2">
+        </div>
+
+        <div class="mb-5">
+            <label class="font-semibold">Notes</label>
+            <textarea name="notes" rows="4"
+                      class="w-full border rounded px-3 py-2">{{ team.notes }}</textarea>
+        </div>
+
+        <div class="flex justify-end space-x-3">
+            <a href="{% url 'list_rescue_teams' %}"
+               class="bg-gray-200 px-4 py-2 rounded">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">
+                Update
+            </button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

@@ -9,11 +9,12 @@
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold text-green-700">Educational Videos</h2>
 
-        <a href="{% url 'add_educational_video' %}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        <a href="{% url 'add_educational_video' %}"
+            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
             + Add Video
         </a>
     </div>
-
+  {% include 'includes/_messages.html' %}
     <table class="w-full border border-gray-300">
         <thead class="bg-green-700 text-white">
             <tr>
@@ -27,11 +28,12 @@
         <tbody>
             {% for video in videos %}
             <tr class="border-b">
+
                 <td class="p-3">
                     {% if video.thumbnail %}
-                        <img src="{{ video.thumbnail.url }}"  class="h-20 rounded shadow" >
+                    <img src="{{ video.thumbnail.url }}" class="h-20 rounded shadow">
                     {% else %}
-                        <img src="{% static 'images/no_video.png' %}" alt="No thumbnail Added" class="h-20 rounded">
+                    <img src="{% static 'images/no_video.png' %}" alt="No thumbnail" class="h-20 rounded">
                     {% endif %}
                 </td>
 
@@ -39,30 +41,100 @@
 
                 <td class="p-3">{{ video.category|title }}</td>
 
-                <td class="p-3 text-center space-x-3">
-                    <a href="{{ video.video.url }}" target="_blank" class="text-blue-600 font-semibold">
-                        View
-                    </a>
+                <td class="p-3 text-center space-x-2">
 
-                    <a href="{% url 'edit_educational_video' video.id %}" 
-                       class="text-green-700 font-semibold">
-                        Edit
+                    <button type="button" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                        onclick="document.getElementById('videoModal{{ video.id }}').classList.remove('hidden')">
+                        View
+                    </button>
+
+                    <a href="{% url 'edit_educational_video' video.id %}">
+                        <button type="button" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
+                            Edit
+                        </button>
                     </a>
 
                     <a href="{% url 'delete_educational_video' video.id %}"
-                       class="text-red-600 font-semibold"
-                       onclick="return confirm('Delete this video?');">
-                        Delete
+                        onclick="return confirm('Delete this video?');">
+                        <button type="button" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+                            Delete
+                        </button>
                     </a>
+
                 </td>
+
             </tr>
+
+            <!-- Modal -->
+            <div id="videoModal{{ video.id }}"
+                class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+
+                <div class="bg-white rounded-lg max-w-xl w-full mx-4 p-4 shadow-lg
+              max-h-[85vh] overflow-y-auto">
+
+                    <!-- Header -->
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-semibold">{{ video.title }}</h3>
+                        <button type="button" class="text-gray-600 hover:text-gray-800 text-xl"
+                            onclick="document.getElementById('videoModal{{ video.id }}').classList.add('hidden')">
+                            ✕
+                        </button>
+                    </div>
+
+                    <!-- Thumbnail -->
+                    <div class="mb-3">
+                        {% if video.thumbnail %}
+                        <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}"
+                            class="w-full h-44 object-cover rounded">
+                        {% else %}
+                        <img src="{% static 'images/no_video.png' %}" alt="No thumbnail"
+                            class="w-full h-44 object-cover rounded">
+                        {% endif %}
+                    </div>
+
+                    <!-- Video -->
+                    {% if video.video %}
+                    <video controls class="w-full rounded shadow h-56 mb-3">
+                        <source src="{{ video.video.url }}">
+                    </video>
+                    {% endif %}
+
+                    <!-- Meta Info -->
+                    <div class="text-sm text-gray-600 space-y-1">
+                        <p><strong>Category:</strong> {{ video.category|title }}</p>
+                        <p><strong>Uploaded:</strong> {{ video.created_at }}</p>
+                        <p><strong>Officer:</strong> {{ video.officer.name }}</p>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="text-sm mt-3">
+                        <p class="font-semibold">Description</p>
+                        <p class="text-gray-700 whitespace-pre-line">
+                            {{ video.description|default:"No description provided." }}
+                        </p>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="mt-4 text-right">
+                        <button type="button" class="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
+                            onclick="document.getElementById('videoModal{{ video.id }}').classList.add('hidden')">
+                            Close
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
 
             {% empty %}
             <tr>
-                <td colspan="4" class="text-center p-4 text-gray-500">No videos uploaded yet.</td>
+                <td colspan="4" class="text-center p-4 text-gray-500">
+                    No videos uploaded yet.
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
 </div>
 {% endblock %}

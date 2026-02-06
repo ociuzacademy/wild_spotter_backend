@@ -74,20 +74,27 @@ urlpatterns = [
     path('officer/posters/delete/<int:poster_id>/', delete_awareness_poster, name='delete_awareness_poster'),
 
 
-
+    #Educational Video Management
     path("videos/add/", views.add_educational_video, name="add_educational_video"),
     path("videos/list/", views.list_educational_videos, name="list_educational_videos"),
     path("videos/delete/<int:video_id>/", views.delete_educational_video, name="delete_educational_video"),
     path("videos/edit/<int:video_id>/", views.edit_educational_video, name="edit_educational_video"),
 
-
+    #Wildlife Protection Image Management
     path("add-protection-image/", add_protection_image, name="add_protection_image"),
     path("list-protection-images/", list_protection_images, name="list_protection_images"),
     path("edit-protection-image/<int:image_id>/", edit_protection_image, name="edit_protection_image"),
     path("delete-protection-image/<int:image_id>/", delete_protection_image, name="delete_protection_image"),
     
+    #Rescue Team Management
+    path('rescue-team/add/', views.add_rescue_team, name='add_rescue_team'),
+    path('rescue-teams/', views.list_rescue_teams, name='list_rescue_teams'),
+    path('rescue-team/edit/<int:team_id>/',
+         views.edit_rescue_team,
+         name='edit_rescue_team'),
 
-
-
+    path('rescue-team/delete/<int:team_id>/',
+         views.delete_rescue_team,
+         name='delete_rescue_team'),
 
 ]

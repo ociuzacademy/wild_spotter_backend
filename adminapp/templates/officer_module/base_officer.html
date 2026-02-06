@@ -78,6 +78,22 @@
               <a href="{% url 'list_educational_videos' %}" class="px-4 py-2 hover:bg-green-100">List Videos</a>
             </div>
           </div>
+          
+        <div class="relative">
+            <button
+              class="hover:text-green-200 focus:outline-none flex items-center gap-1"
+              onclick="toggleDropdown('rescueDropdown')"
+            >
+              Rescue Teams ▾
+            </button>
+            <div
+              id="rescueDropdown"
+              class="hidden absolute left-0 mt-2 flex-col bg-white text-green-700 rounded-md shadow-lg z-10 min-w-[180px]">
+              <a href="{% url 'add_rescue_team' %}" class="px-4 py-2 hover:bg-green-100">Add Team</a><br>
+              <br>
+              <a href="{% url 'list_rescue_teams' %}" class="px-4 py-2 hover:bg-green-100">List Teams</a>
+            </div>
+          </div>
 
         <a href="{% url 'admin_logout' %}" 
            class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg font-semibold">
