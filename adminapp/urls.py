@@ -19,15 +19,12 @@ urlpatterns = [
     path('edit-animal/<int:animal_id>/', views.edit_animal, name='edit_animal'),
     path('delete-animal/<int:animal_id>/', views.delete_animal, name='delete_animal'),
 
-   #Sanctuary Management
+    #Sanctuary Management
     path('add-wildlife-sanctuary/', views.add_wildlife_sanctuary, name='add_wildlife_sanctuary'),
     path('list-wildlife-sanctuary/', views.list_wildlife_sanctuary, name='list_wildlife_sanctuary'),
     path('view-wildlife-sanctuary/<int:sanctuary_id>/', views.view_sanctuary_details, name='view_sanctuary_details'),
     path('edit-sanctuary/<int:id>/', views.edit_wildlife_sanctuary, name='edit_wildlife_sanctuary'),
     path('delete-sanctuary/<int:id>/', views.delete_wildlife_sanctuary, name='delete_wildlife_sanctuary'),
-
-
-
 
     # Community Management
     path('add-community/', views.add_community, name='add_community'),
@@ -35,20 +32,16 @@ urlpatterns = [
     path('edit-community/<int:pk>/', views.edit_community, name='edit_community'),
     path('delete-community/<int:pk>/', views.delete_community, name='delete_community'),
 
-
     #Topic management
     path('topics/', views.manage_topics, name='manage_topics'),
-
 
     #Journal list
     path('journals/', views.list_journals, name='list_journals'),
     path('journal/approve/<int:journal_id>/', views.approve_journal, name='approve_journal'),
     path('journal/reject/<int:journal_id>/', views.reject_journal, name='reject_journal'),
 
-
     #View users
     path('view-users/', views.view_users, name='view_users'),
-
 
     #Forest officers
     path('officers/add/', views.add_forest_officer, name="add_forest_officer"),
@@ -58,6 +51,9 @@ urlpatterns = [
 
     #Admin view recent sightings
     path("admin-view-recent-sightings/", admin_view_recent_sightings, name="admin_view_recent_sightings"),
+
+    #Admin view rescue teams
+    path('admin-rescue-teams/',views.admin_rescue_team_list,name='admin_rescue_team_list'), 
 
     #Forest Dashboard
     path('forest_dashboard/',views.forest_dashboard,name='forest_dashboard'),
@@ -72,7 +68,6 @@ urlpatterns = [
     path('officer/posters/', list_awareness_posters, name='list_awareness_posters'),
     path("officer/posters/edit/<int:poster_id>/", edit_awareness_poster, name="edit_awareness_poster"),
     path('officer/posters/delete/<int:poster_id>/', delete_awareness_poster, name='delete_awareness_poster'),
-
 
     #Educational Video Management
     path("videos/add/", views.add_educational_video, name="add_educational_video"),
@@ -89,12 +84,7 @@ urlpatterns = [
     #Rescue Team Management
     path('rescue-team/add/', views.add_rescue_team, name='add_rescue_team'),
     path('rescue-teams/', views.list_rescue_teams, name='list_rescue_teams'),
-    path('rescue-team/edit/<int:team_id>/',
-         views.edit_rescue_team,
-         name='edit_rescue_team'),
-
-    path('rescue-team/delete/<int:team_id>/',
-         views.delete_rescue_team,
-         name='delete_rescue_team'),
+    path('rescue-team/edit/<int:team_id>/', views.edit_rescue_team, name='edit_rescue_team'),
+    path('rescue-team/delete/<int:team_id>/', views.delete_rescue_team, name='delete_rescue_team'),
 
 ]

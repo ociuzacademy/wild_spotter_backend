@@ -5,7 +5,9 @@
 <div class="max-w-3xl mx-auto bg-white p-6 shadow rounded-lg">
 
     <h2 class="text-2xl font-bold text-green-700 mb-4">Edit Image</h2>
-  {% include 'includes/_messages.html' %}
+  <div class="mb-4">
+      {% include 'includes/_messages.html' %}
+  </div>
     <img src="{{ image_obj.image.url }}" class="h-32 rounded mb-4 shadow">
 
     <form method="POST" enctype="multipart/form-data">

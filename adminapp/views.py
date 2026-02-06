@@ -670,7 +670,44 @@ def admin_view_recent_sightings(request):
         "sightings": sightings
     })
 
+#------------------------------------
+# Admin view rescue team by sanctuary
+#------------------------------------
+from django.shortcuts import render
+from adminapp.models import RescueTeam, ForestOfficer
+from django.db.models import Q
 
+def admin_rescue_team_list(request):
+    search = request.GET.get('search', '')
+    sanctuary_id = request.GET.get('sanctuary')
+
+    rescue_teams = RescueTeam.objects.select_related(
+        'officer', 'officer__sanctuary'
+    )
+
+    # 🔍 Search
+    if search:
+        rescue_teams = rescue_teams.filter(
+            Q(team_name__icontains=search) |
+            Q(leader_name__icontains=search) |
+            Q(officer__name__icontains=search)
+        )
+
+    # 🏞 Filter by Sanctuary
+    if sanctuary_id:
+        rescue_teams = rescue_teams.filter(officer__sanctuary_id=sanctuary_id)
+
+    sanctuaries = ForestOfficer.objects.values(
+        'sanctuary__id', 'sanctuary__name'
+    ).distinct()
+
+    context = {
+        'rescue_teams': rescue_teams,
+        'sanctuaries': sanctuaries,
+        'search': search,
+        'selected_sanctuary': sanctuary_id,
+    }
+    return render(request, 'adminapp/admin_view_rescue/rescue_team_list.html', context)
 
 
 #-----------------------

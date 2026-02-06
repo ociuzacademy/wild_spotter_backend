@@ -38,7 +38,9 @@
     <h1 class="text-4xl font-extrabold text-primary tracking-tight">Login</h1>
     <p class="text-gray-600">Choose your role to continue</p>
   </div>
-
+ <div class="mb-4">
+      {% include 'includes/_messages.html' %}
+  </div>
   <form method="POST" class="flex flex-col gap-6">
     {% csrf_token %}
 

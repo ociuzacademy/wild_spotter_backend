@@ -10,7 +10,9 @@
         Edit {{ animal.name }}
     </h2>
 
-    {% include 'includes/_messages.html' %}
+    <div class="mb-4">
+      {% include 'includes/_messages.html' %}
+  </div>
 
     <div class="bg-white shadow-md rounded-lg p-6">
         <form method="POST" enctype="multipart/form-data" class="space-y-4">

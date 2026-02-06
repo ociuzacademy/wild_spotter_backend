@@ -8,7 +8,9 @@
         Edit Forest Officer
     </h2>
 
-    {% include 'includes/_messages.html' %}
+    <div class="mb-4">
+      {% include 'includes/_messages.html' %}
+  </div>
 
     <form method="POST" enctype="multipart/form-data" class="grid grid-cols-1 gap-6">
         {% csrf_token %}
